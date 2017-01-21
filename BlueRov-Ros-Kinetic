@@ -1,0 +1,32 @@
+# Compiling BlueRov on ROS Kinetic (Ubuntu 16.04)
+
+Here are the steps to compiling BlueRov on Ubuntu 16.04:
+
+1. Install dependencies:
+`sudo apt-get install -y ros-kinetic-image-common ros-kinetic-robot-state-publisher ros-kinetic-joint-state-publisher ros-kinetic-image-transport-plugins ros-kinetic-mavros ros-kinetic-mavros-msgs ros-kinetic-mavros-extras ros-kinetic-joy libhdf5-openmpi-10 libhdf5-openmpi-dev ros-kinetic-pcl-conversions ros-kinetic-pcl-ros`
+
+2. Clone the repository:
+`
+mkdir -p ~/repos ~/catkin_ws/src
+git clone https://github.com/bluerobotics/bluerov-ros-pkg.git ~/repos/bluerov-ros-pkg
+`
+
+3. Set up symbolic links to point from the catkin workspace to where the package is:
+`
+ln -s ~/repos/bluerov-ros-pkg/bluerov ~/catkin_ws/src/bluerov
+ln -s ~/repos/bluerov-ros-pkg/bluerov_apps ~/catkin_ws/src/bluerov_apps
+`
+
+4. Set up udev rules:
+`
+sudo cp ~/catkin_ws/src/bluerov/debian/99-bluerov.rules /etc/udev/rules.d/
+sudo cp ~/catkin_ws/src/bluerov_apps/debian/99-bluerov-apps.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo service udev restart && sudo udevadm trigger
+`
+
+5. Make and install
+`
+cd ~/catkin_ws
+catkin_make
+catkin_make install
+`
